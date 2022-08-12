@@ -13,17 +13,24 @@ type Body struct {
 	Adhar string `json:"aadharNumber" binding:"required"`
 }
 
-type ResponseBody struct {
-	_id  int    `json:"id"`
-	Name string `json:"name"`
-	Age  int    `json:"age"`
-}
-
 var UsersList = make(map[string]common.User)
 
 func GetUsers(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"data": UsersList,
+	})
+}
+
+func RetrieveUser(ctx *gin.Context) {
+	id := common.GetSHA1([]byte(ctx.Param("id")))
+	if _, OK := UsersList[id]; !OK {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"data": "",
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"data": UsersList[id],
 	})
 }
 
@@ -55,4 +62,18 @@ func AddUser(ctx *gin.Context) {
 			"error":  "Already Exists",
 		})
 	}
+}
+
+func DeleteUser(ctx *gin.Context) {
+	id := common.GetSHA1([]byte(ctx.Param("id")))
+	if _, OK := UsersList[id]; !OK {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"data": "",
+		})
+		return
+	}
+	delete(UsersList, id)
+	ctx.JSON(http.StatusOK, gin.H{
+		"data": UsersList,
+	})
 }
