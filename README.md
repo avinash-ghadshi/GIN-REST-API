@@ -1,9 +1,9 @@
 # GIN-REST-API
 REST API using GO - Gin/Gonic
 
-**How To Run?**
-_go run router.go server.go_
+-**How To Run?**
+>go run routers.go server.go_
 
 _**We are Improving this. We will keep Updating
-Stay Tuned!!!**_
+>Stay Tuned!!!**_
 
